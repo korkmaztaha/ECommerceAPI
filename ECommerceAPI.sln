@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerceApi.Infrastructure", "Infrastructure\ECommerceApi.Infrastructure\ECommerceApi.Infrastructure.csproj", "{311580CB-2D39-4FAE-BB85-B550F7CA1F94}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerceApi.Persistance", "Infrastructure\ECommerceApi.Persistance\ECommerceApi.Persistance.csproj", "{C4659EEA-5FA6-442E-9324-B82A979641B0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerceApi.Persistence", "Infrastructure\ECommerceApi.Persistance\ECommerceApi.Persistence.csproj", "{C4659EEA-5FA6-442E-9324-B82A979641B0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{0AC344C5-DFA7-4BA8-A099-61AB6546F814}"
 EndProject
