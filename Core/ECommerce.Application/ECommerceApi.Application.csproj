@@ -10,4 +10,8 @@
     <ProjectReference Include="..\ECommerce.Domain\ECommerceApi.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="NewFolder\" />
+  </ItemGroup>
+
 </Project>
