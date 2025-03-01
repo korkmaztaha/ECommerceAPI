@@ -1,5 +1,6 @@
 ﻿using ECommerceApi.Application.Repositories;
 using ECommerceApi.Application.RequestParameters;
+using ECommerceApi.Application.Services;
 using ECommerceApi.Application.ViewModels;
 using ECommerceApi.Domain.Entities;
 using ECommerceApi.Persistence.Repositories;
@@ -18,12 +19,14 @@ namespace ECommerceApi.Api.Controllers
         readonly private IProductWriteRepository _productWriteRepository;
         readonly private IProductReadRepository _productReadRepository;
         readonly private IWebHostEnvironment _webHostEnvironment;
+        readonly private IFileService _fileService;
 
-        public ProductsController(IProductReadRepository productReadRepository, IProductWriteRepository productWriteRepository, IWebHostEnvironment webHostEnvironment)
+        public ProductsController(IProductReadRepository productReadRepository, IProductWriteRepository productWriteRepository, IWebHostEnvironment webHostEnvironment, IFileService fileService)
         {
             _productReadRepository = productReadRepository;
             _productWriteRepository = productWriteRepository;
             _webHostEnvironment = webHostEnvironment;
+            _fileService = fileService;
         }
 
         //[HttpGet]
@@ -114,47 +117,49 @@ namespace ECommerceApi.Api.Controllers
             });
         }
 
-        //[HttpPost("[action]")]
-        //public async Task<IActionResult> Upload()
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Upload()
+        {
+
+            await _fileService.UploadAsync("resource/product-images", Request.Form.Files);
+
+            //string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "resource/product-images");
+            //if (!Directory.Exists(uploadPath))
+            //    Directory.CreateDirectory(uploadPath);
+
+            //Random random = new Random();
+
+            //foreach (IFormFile file in Request.Form.Files)
+            //{
+            //    string fullPath = Path.Combine(uploadPath, $"{random.Next()}{Path.GetExtension(file.FileName)}");
+            //    using FileStream fileStream = new(fullPath, FileMode.Create, FileAccess.Write, FileShare.None, 1024 * 1024);
+            //    await file.CopyToAsync(fileStream);
+            //    await fileStream.FlushAsync();
+            //}
+            return Ok();
+
+        }
+        //[HttpPost("Upload")]
+        //public async Task<IActionResult> Upload([FromForm] IFormFile file)
         //{
+        //    if (file == null || file.Length == 0)
+        //    {
+        //        return BadRequest("Dosya seçilmedi.");
+        //    }
 
         //    string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "resource/product-images");
         //    if (!Directory.Exists(uploadPath))
         //        Directory.CreateDirectory(uploadPath);
 
-        //    Random random = new Random();
+        //    string uniqueFileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+        //    string fullPath = Path.Combine(uploadPath, uniqueFileName);
 
-        //    foreach (IFormFile file in Request.Form.Files)
-        //    {
-        //        string fullPath = Path.Combine(uploadPath, $"{random.Next()}{Path.GetExtension(file.FileName)}");
-        //        using FileStream fileStream = new(fullPath, FileMode.Create, FileAccess.Write, FileShare.None, 1024 * 1024);
-        //        await file.CopyToAsync(fileStream);
-        //        await fileStream.FlushAsync();
-        //    }
-        //    return Ok();
+        //    using FileStream fileStream = new(fullPath, FileMode.Create, FileAccess.Write, FileShare.None, 1024 * 1024);
+        //    await file.CopyToAsync(fileStream);
+        //    await fileStream.FlushAsync();
 
+        //    return Ok(new { FilePath = $"resource/product-images/{uniqueFileName}" });
         //}
-        [HttpPost("Upload")]
-        public async Task<IActionResult> Upload([FromForm] IFormFile file)
-        {
-            if (file == null || file.Length == 0)
-            {
-                return BadRequest("Dosya seçilmedi.");
-            }
-
-            string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "resource/product-images");
-            if (!Directory.Exists(uploadPath))
-                Directory.CreateDirectory(uploadPath);
-
-            string uniqueFileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
-            string fullPath = Path.Combine(uploadPath, uniqueFileName);
-
-            using FileStream fileStream = new(fullPath, FileMode.Create, FileAccess.Write, FileShare.None, 1024 * 1024);
-            await file.CopyToAsync(fileStream);
-            await fileStream.FlushAsync();
-
-            return Ok(new { FilePath = $"resource/product-images/{uniqueFileName}" });
-        }
     }
 
 }

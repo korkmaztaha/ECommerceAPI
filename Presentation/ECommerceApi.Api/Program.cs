@@ -1,5 +1,6 @@
 using ECommerceApi.Api.Filters;
 using ECommerceApi.Application.Validators.Products;
+using ECommerceApi.Infrastructure;
 using ECommerceApi.Infrastructure.Filters;
 using ECommerceApi.Persistence;
 using FluentValidation.AspNetCore;
@@ -10,7 +11,9 @@ builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>
     policy.WithOrigins("http://localhost:4100", "https://localhost:4100").AllowAnyHeader().AllowAnyMethod().AllowCredentials()
 ));
 
+
 builder.Services.AddPersitenceServices();
+builder.Services.AddInfrastructureServices();
 
 builder.Services.AddControllers(options =>options.Filters.Add<ValidationFilter>())
     .AddFluentValidation(conf=>conf.RegisterValidatorsFromAssemblyContaining<CreateProductValidator>())
