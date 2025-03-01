@@ -13,9 +13,8 @@ namespace ECommerceApi.Application.Validators.Products
         public CreateProductValidator()
         {
             RuleFor(p => p.Name)
-                .NotEmpty()
-                .NotNull()
-                    .WithMessage("Lütfen ürün ismi giriniz")
+                .NotEmpty().WithMessage("Lütfen ürün ismi giriniz")
+                .NotNull().WithMessage("Lütfen ürün ismi giriniz")
                 .MaximumLength(150)
                 .MinimumLength(3);
 
