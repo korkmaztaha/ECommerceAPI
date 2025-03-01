@@ -12,26 +12,26 @@ namespace ECommerceApi.Application.Validators.Products
     {
         public CreateProductValidator()
         {
-            //RuleFor(p => p.Name)
-            //    .NotEmpty()
-            //    .NotNull()
-            //        .WithMessage("Lütfen ürün ismi giriniz")
-            //    .MaximumLength(150)
-            //    .MinimumLength(3);
+            RuleFor(p => p.Name)
+                .NotEmpty()
+                .NotNull()
+                    .WithMessage("Lütfen ürün ismi giriniz")
+                .MaximumLength(150)
+                .MinimumLength(3);
 
-            //RuleFor(p => p.Stock)
-            //    .NotEmpty()
-            //    .NotNull()
-            //        .WithMessage("Lütfen Stok giriniz")
-            //    .Must(s => s >= 0)
-            //    .WithMessage("Stok negatif olamaz");
+            RuleFor(p => p.Stock)
+                .NotEmpty()
+                .NotNull()
+                    .WithMessage("Lütfen Stok giriniz")
+                .Must(s => s >= 0)
+                .WithMessage("Stok negatif olamaz");
 
-            //RuleFor(p => p.Price)
-            //.NotEmpty()
-            //.NotNull()
-            //    .WithMessage("Lütfen Fiyat giriniz")
-            //.Must(p => p >= 0)
-            //.WithMessage("Fiyat negatif olamaz");
+            RuleFor(p => p.Price)
+            .NotEmpty()
+            .NotNull()
+                .WithMessage("Lütfen Fiyat giriniz")
+            .Must(p => p >= 0)
+            .WithMessage("Fiyat negatif olamaz");
 
 
         }
