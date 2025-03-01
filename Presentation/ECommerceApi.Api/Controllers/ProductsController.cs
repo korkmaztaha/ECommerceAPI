@@ -1,8 +1,10 @@
 ﻿using ECommerceApi.Application.Repositories;
+using ECommerceApi.Application.RequestParameters;
 using ECommerceApi.Application.ViewModels;
 using ECommerceApi.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Xml.Linq;
 
@@ -39,26 +41,47 @@ namespace ECommerceApi.Api.Controllers
 
         //}
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([FromQuery]Pagination pagination)
         {
-            return Ok(_productReadRepository.GetAll(false));
+            var query = _productReadRepository.GetAll(false); 
+
+            var totalCount = await query.CountAsync(); 
+            var products = await query
+
+                .Skip(pagination.Page * pagination.Size)
+                .Take(pagination.Size)
+                .Select(p => new
+                {
+                    p.Name,
+                    p.Id,
+                    p.Stock,
+                    p.Price,
+                    p.CreatedDate,
+                    p.UpdatedDate
+                })
+                .ToListAsync(); 
+
+            return Ok(new
+            {
+                totalCount,
+                products
+            });
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(string id)
         {
-            return Ok(_productReadRepository.GetByIdAsync(id,false));
+            return Ok(_productReadRepository.GetByIdAsync(id, false));
         }
         [HttpPost]
         public async Task<IActionResult> Post(VM_Create_Product model)
         {
-            if(ModelState.IsValid)
-
-            await _productWriteRepository.AddAsync(new()
-            {
-                Name = model.Name,
-                Stock = model.Stock,
-                Price = model.Price,
-            });
+          
+                await _productWriteRepository.AddAsync(new()
+                {
+                    Name = model.Name,
+                    Stock = model.Stock,
+                    Price = model.Price,
+                });
             await _productWriteRepository.SaveAsync();
             return StatusCode((int)HttpStatusCode.Created);
         }
