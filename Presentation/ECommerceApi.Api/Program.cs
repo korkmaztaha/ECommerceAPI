@@ -1,3 +1,4 @@
+using ECommerceApi.Api.Filters;
 using ECommerceApi.Application.Validators.Products;
 using ECommerceApi.Infrastructure.Filters;
 using ECommerceApi.Persistence;
@@ -16,7 +17,10 @@ builder.Services.AddControllers(options =>options.Filters.Add<ValidationFilter>(
     .ConfigureApiBehaviorOptions(options=>options.SuppressModelStateInvalidFilter=true);
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.OperationFilter<SwaggerFileUploadOperationFilter>();
+});
 
 var app = builder.Build();
 
@@ -26,6 +30,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
+app.UseStaticFiles();
 app.UseHttpsRedirection();
 app.UseCors();
 app.UseAuthorization();

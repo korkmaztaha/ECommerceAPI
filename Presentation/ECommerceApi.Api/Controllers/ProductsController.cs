@@ -2,6 +2,7 @@
 using ECommerceApi.Application.RequestParameters;
 using ECommerceApi.Application.ViewModels;
 using ECommerceApi.Domain.Entities;
+using ECommerceApi.Persistence.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,11 +17,13 @@ namespace ECommerceApi.Api.Controllers
     {
         readonly private IProductWriteRepository _productWriteRepository;
         readonly private IProductReadRepository _productReadRepository;
+        readonly private IWebHostEnvironment _webHostEnvironment;
 
-        public ProductsController(IProductReadRepository productReadRepository, IProductWriteRepository productWriteRepository)
+        public ProductsController(IProductReadRepository productReadRepository, IProductWriteRepository productWriteRepository, IWebHostEnvironment webHostEnvironment)
         {
             _productReadRepository = productReadRepository;
             _productWriteRepository = productWriteRepository;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         //[HttpGet]
@@ -41,11 +44,11 @@ namespace ECommerceApi.Api.Controllers
 
         //}
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery]Pagination pagination)
+        public async Task<IActionResult> Get([FromQuery] Pagination pagination)
         {
-            var query = _productReadRepository.GetAll(false); 
+            var query = _productReadRepository.GetAll(false);
 
-            var totalCount = await query.CountAsync(); 
+            var totalCount = await query.CountAsync();
             var products = await query
 
                 .Skip(pagination.Page * pagination.Size)
@@ -59,7 +62,7 @@ namespace ECommerceApi.Api.Controllers
                     p.CreatedDate,
                     p.UpdatedDate
                 })
-                .ToListAsync(); 
+                .ToListAsync();
 
             return Ok(new
             {
@@ -75,13 +78,13 @@ namespace ECommerceApi.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(VM_Create_Product model)
         {
-          
-                await _productWriteRepository.AddAsync(new()
-                {
-                    Name = model.Name,
-                    Stock = model.Stock,
-                    Price = model.Price,
-                });
+
+            await _productWriteRepository.AddAsync(new()
+            {
+                Name = model.Name,
+                Stock = model.Stock,
+                Price = model.Price,
+            });
             await _productWriteRepository.SaveAsync();
             return StatusCode((int)HttpStatusCode.Created);
         }
@@ -105,7 +108,56 @@ namespace ECommerceApi.Api.Controllers
             await _productWriteRepository.RemoveAsync(id);
             await _productWriteRepository.SaveAsync();
 
-            return Ok();
+            return Ok(new
+            {
+                message = "silme işlemi başarılı"
+            });
+        }
+
+        //[HttpPost("[action]")]
+        //public async Task<IActionResult> Upload()
+        //{
+
+        //    string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "resource/product-images");
+        //    if (!Directory.Exists(uploadPath))
+        //        Directory.CreateDirectory(uploadPath);
+
+        //    Random random = new Random();
+
+        //    foreach (IFormFile file in Request.Form.Files)
+        //    {
+        //        string fullPath = Path.Combine(uploadPath, $"{random.Next()}{Path.GetExtension(file.FileName)}");
+        //        using FileStream fileStream = new(fullPath, FileMode.Create, FileAccess.Write, FileShare.None, 1024 * 1024);
+        //        await file.CopyToAsync(fileStream);
+        //        await fileStream.FlushAsync();
+        //    }
+        //    return Ok();
+
+        //}
+        [HttpPost("Upload")]
+        public async Task<IActionResult> Upload([FromForm] IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("Dosya seçilmedi.");
+            }
+
+            string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "resource/product-images");
+            if (!Directory.Exists(uploadPath))
+                Directory.CreateDirectory(uploadPath);
+
+            string uniqueFileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+            string fullPath = Path.Combine(uploadPath, uniqueFileName);
+
+            using FileStream fileStream = new(fullPath, FileMode.Create, FileAccess.Write, FileShare.None, 1024 * 1024);
+            await file.CopyToAsync(fileStream);
+            await fileStream.FlushAsync();
+
+            return Ok(new { FilePath = $"resource/product-images/{uniqueFileName}" });
         }
     }
+
 }
+
+
+
