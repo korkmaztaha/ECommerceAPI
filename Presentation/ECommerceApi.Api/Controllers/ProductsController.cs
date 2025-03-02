@@ -117,28 +117,28 @@ namespace ECommerceApi.Api.Controllers
             });
         }
 
-        [HttpPost("[action]")]
-        public async Task<IActionResult> Upload()
-        {
+        //[HttpPost("[action]")]
+        //public async Task<IActionResult> Upload()
+        //{
 
-            await _fileService.UploadAsync("resource/product-images", Request.Form.Files);
+        //    await _fileService.UploadAsync("resource/product-images", Request.Form.Files);
 
-            //string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "resource/product-images");
-            //if (!Directory.Exists(uploadPath))
-            //    Directory.CreateDirectory(uploadPath);
+        //    //string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "resource/product-images");
+        //    //if (!Directory.Exists(uploadPath))
+        //    //    Directory.CreateDirectory(uploadPath);
 
-            //Random random = new Random();
+        //    //Random random = new Random();
 
-            //foreach (IFormFile file in Request.Form.Files)
-            //{
-            //    string fullPath = Path.Combine(uploadPath, $"{random.Next()}{Path.GetExtension(file.FileName)}");
-            //    using FileStream fileStream = new(fullPath, FileMode.Create, FileAccess.Write, FileShare.None, 1024 * 1024);
-            //    await file.CopyToAsync(fileStream);
-            //    await fileStream.FlushAsync();
-            //}
-            return Ok();
+        //    //foreach (IFormFile file in Request.Form.Files)
+        //    //{
+        //    //    string fullPath = Path.Combine(uploadPath, $"{random.Next()}{Path.GetExtension(file.FileName)}");
+        //    //    using FileStream fileStream = new(fullPath, FileMode.Create, FileAccess.Write, FileShare.None, 1024 * 1024);
+        //    //    await file.CopyToAsync(fileStream);
+        //    //    await fileStream.FlushAsync();
+        //    //}
+        //    return Ok();
 
-        }
+        //}
         //[HttpPost("Upload")]
         //public async Task<IActionResult> Upload([FromForm] IFormFile file)
         //{

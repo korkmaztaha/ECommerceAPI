@@ -1,6 +1,5 @@
 ﻿using ECommerceApi.Application.Repositories;
 using ECommerceApi.Application.Services;
-using ECommerceApi.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -14,7 +13,7 @@ namespace ECommerceApi.Infrastructure
     {
         public static void AddInfrastructureServices(this IServiceCollection services)
         {
-            services.AddScoped<IFileService, FileService>();
+            //services.AddScoped<IFileService, FileService>();
 
         }
     }
