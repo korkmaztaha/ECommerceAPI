@@ -10,7 +10,6 @@ namespace ECommerceApi.Domain.Entities
 {
     public class File:BaseEntity
     {
-        public int MyProperty { get; set; }
 
         [NotMapped]
         public override DateTime UpdatedDate { get => base.UpdatedDate; set => base.UpdatedDate = value; }
