@@ -2,6 +2,7 @@ using ECommerceApi.Api.Filters;
 using ECommerceApi.Application.Validators.Products;
 using ECommerceApi.Infrastructure;
 using ECommerceApi.Infrastructure.Filters;
+using ECommerceApi.Infrastructure.Services.Storage.Local;
 using ECommerceApi.Persistence;
 using FluentValidation.AspNetCore;
 
@@ -14,7 +15,7 @@ builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>
 
 builder.Services.AddPersitenceServices();
 builder.Services.AddInfrastructureServices();
-
+builder.Services.AddStorage<LocalStorage>();
 builder.Services.AddControllers(options =>options.Filters.Add<ValidationFilter>())
     .AddFluentValidation(conf=>conf.RegisterValidatorsFromAssemblyContaining<CreateProductValidator>())
     .ConfigureApiBehaviorOptions(options=>options.SuppressModelStateInvalidFilter=true);
