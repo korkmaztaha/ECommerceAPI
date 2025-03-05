@@ -1,4 +1,5 @@
 using ECommerceApi.Api.Filters;
+using ECommerceApi.Application;
 using ECommerceApi.Application.Validators.Products;
 using ECommerceApi.Infrastructure;
 using ECommerceApi.Infrastructure.Filters;
@@ -16,6 +17,7 @@ builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>
 
 builder.Services.AddPersitenceServices();
 builder.Services.AddInfrastructureServices();
+builder.Services.AddApplicationServices();
 //builder.Services.AddStorage<LocalStorage>();
 //TODO: detaylý test et
 builder.Services.AddStorage<AzureStorage>();

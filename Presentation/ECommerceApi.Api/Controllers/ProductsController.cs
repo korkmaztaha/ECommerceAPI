@@ -1,8 +1,11 @@
-﻿using ECommerceApi.Application.Repositories;
+﻿using ECommerceApi.Application.Features.Commands.CreateProduct;
+using ECommerceApi.Application.Features.Queries.GetAllProduct;
+using ECommerceApi.Application.Repositories;
 using ECommerceApi.Application.RequestParameters;
 using ECommerceApi.Application.ViewModels;
 using ECommerceApi.Domain.Entities;
 using ECommerceApi.Persistence.Repositories;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,11 +23,14 @@ namespace ECommerceApi.Api.Controllers
         readonly private IWebHostEnvironment _webHostEnvironment;
         //readonly private IFileService _fileService;
 
-        public ProductsController(IProductReadRepository productReadRepository, IProductWriteRepository productWriteRepository, IWebHostEnvironment webHostEnvironment /*IFileService fileService*/)
+
+        readonly IMediator _mediator;
+        public ProductsController(IProductReadRepository productReadRepository, IProductWriteRepository productWriteRepository, IWebHostEnvironment webHostEnvironment /*IFileService fileService*/, IMediator mediator)
         {
             _productReadRepository = productReadRepository;
             _productWriteRepository = productWriteRepository;
             _webHostEnvironment = webHostEnvironment;
+            _mediator = mediator;
             //_fileService = fileService;
         }
 
@@ -46,49 +52,26 @@ namespace ECommerceApi.Api.Controllers
 
         //}
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] Pagination pagination)
+        public async Task<IActionResult> Get([FromQuery]GettAllProductQueryRequest gettAllProductQueryRequest)
         {
-            var query = _productReadRepository.GetAll(false);
+            GettAllProductQueryResponse response = await _mediator.Send(gettAllProductQueryRequest);
+            return Ok(response);
 
-            var totalCount = await query.CountAsync();
-            var products = await query
 
-                .Skip(pagination.Page * pagination.Size)
-                .Take(pagination.Size)
-                .Select(p => new
-                {
-                    p.Name,
-                    p.Id,
-                    p.Stock,
-                    p.Price,
-                    p.CreatedDate,
-                    p.UpdatedDate
-                })
-                .ToListAsync();
 
-            return Ok(new
-            {
-                totalCount,
-                products
-            });
         }
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(string id)
-        {
-            return Ok(_productReadRepository.GetByIdAsync(id, false));
-        }
+        //[HttpGet("{id}")]
+        //public async Task<IActionResult> GetById(string id)
+        //{
+        //    return Ok(_productReadRepository.GetByIdAsync(id, false));
+        //}
         [HttpPost]
-        public async Task<IActionResult> Post(VM_Create_Product model)
+        public async Task<IActionResult> Post(CreateProductCommandRequest request)
         {
-
-            await _productWriteRepository.AddAsync(new()
-            {
-                Name = model.Name,
-                Stock = model.Stock,
-                Price = model.Price,
-            });
-            await _productWriteRepository.SaveAsync();
+          CreateProductCommandResponse response = await _mediator.Send(request);
             return StatusCode((int)HttpStatusCode.Created);
+
+           
         }
 
         [HttpPut]
