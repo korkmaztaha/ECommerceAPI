@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECommerceApi.Application.Features.Queries.GetAllProduct
+namespace ECommerceApi.Application.Features.Queries.Products.GetAllProduct
 {
     public class GettAllProductQueryHandler : IRequestHandler<GettAllProductQueryRequest, GettAllProductQueryResponse>
     {
@@ -27,15 +27,15 @@ namespace ECommerceApi.Application.Features.Queries.GetAllProduct
             var totalCount = await query.CountAsync(cancellationToken);
 
             var products = await query
-                .OrderBy(p => p.Id) 
+                .OrderBy(p => p.Id)
                 .Skip(request.Page * request.Size)
                 .Take(request.Size)
-                .Select(p => new  
+                .Select(p => new
                 {
-                    Id = p.Id,
-                    Name = p.Name,
-                    Price = p.Price,
-                    Stock = p.Stock
+                    p.Id,
+                    p.Name,
+                    p.Price,
+                    p.Stock
                 })
                 .ToListAsync(cancellationToken);
 

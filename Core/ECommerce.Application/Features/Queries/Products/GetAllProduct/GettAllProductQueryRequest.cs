@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECommerceApi.Application.Features.Queries.GetAllProduct
+namespace ECommerceApi.Application.Features.Queries.Products.GetAllProduct
 {
     public class GettAllProductQueryRequest : IRequest<GettAllProductQueryResponse>
     {
