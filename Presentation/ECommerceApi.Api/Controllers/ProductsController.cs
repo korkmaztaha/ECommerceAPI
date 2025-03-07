@@ -37,23 +37,7 @@ namespace ECommerceApi.Api.Controllers
             //_fileService = fileService;
         }
 
-        //[HttpGet]
-        //public async Task Get()
-        //{
-        //    await _productWriteRepository.AddAsync(new() 
-        //    { 
-        //        Id = Guid.NewGuid(), Name = "p99", Price = 11, CreatedDate = DateTime.UtcNow, Stock = 22 }
-        //    );
-
-
-        //    await _productWriteRepository.SaveAsync();
-
-        //    //Product p = await _productReadRepository.GetByIdAsync("3c319c26-d0ed-4340-82e8-34b3296b89be");
-        //    //p.Name = "güncellendiyeni";
-        //    //await _productWriteRepository.SaveAsync();
-
-
-        //}
+       
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery]GettAllProductQueryRequest request)
         {
