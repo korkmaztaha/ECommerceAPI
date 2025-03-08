@@ -7,6 +7,7 @@ using ECommerceApi.Infrastructure.Services.Storage.Azure;
 using ECommerceApi.Infrastructure.Services.Storage.Local;
 using ECommerceApi.Persistence;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -15,7 +16,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>
     policy.WithOrigins("http://localhost:4100", "https://localhost:4100").AllowAnyHeader().AllowAnyMethod().AllowCredentials()
 ));
-
 
 builder.Services.AddPersitenceServices();
 builder.Services.AddInfrastructureServices();
@@ -33,36 +33,37 @@ builder.Services.AddSwaggerGen(c =>
     c.OperationFilter<SwaggerFileUploadOperationFilter>();
 });
 
-builder.Services.AddAuthentication("Admin")
-    .AddJwtBearer(options =>
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer("Admin",options =>
     {
-    options.TokenValidationParameters = new()
-    {
-        ValidateAudience = true,
-        ValidateIssuer = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
+        options.TokenValidationParameters = new()
+        {
+            ValidateAudience = true,
+            ValidateIssuer = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
 
-        ValidAudience = builder.Configuration["Token:Audience"],
-        ValidIssuer = builder.Configuration["Token:Issuer"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Token:SecurityKey"]))
-    };
+            ValidAudience = builder.Configuration["Token:Audience"],
+            ValidIssuer = builder.Configuration["Token:Issuer"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Token:SecurityKey"]))
+        };
+    });
 
-    var app = builder.Build();
+var app = builder.Build();
 
-    if (app.Environment.IsDevelopment())
-    {
-        app.UseSwagger();
-        app.UseSwaggerUI();
-    }
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
+app.UseStaticFiles();
+app.UseHttpsRedirection();
+app.UseCors();
 
-    app.UseStaticFiles();
-    app.UseHttpsRedirection();
-    app.UseCors();
-    app.UseAuthorization();
+app.UseAuthentication();
+app.UseAuthorization();
 
+app.MapControllers();
 
-    app.MapControllers();
-
-    app.Run();
+app.Run();
