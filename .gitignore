@@ -365,3 +365,4 @@ FodyWeavers.xsd
 migrations/
 
 appsettings.json
+/Presentation/ECommerceApi.Api/appsettings.Development.json
