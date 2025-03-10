@@ -14,6 +14,8 @@ namespace ECommerceApi.Application
         {
 
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ServiceRegistration).Assembly));
+            services.AddHttpClient();
+            
 
         }
     }
