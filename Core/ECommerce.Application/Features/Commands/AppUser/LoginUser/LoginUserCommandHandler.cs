@@ -1,4 +1,5 @@
-﻿using ECommerceApi.Application.Abstractions.Token;
+﻿using ECommerceApi.Application.Abstractions.Services;
+using ECommerceApi.Application.Abstractions.Token;
 using ECommerceApi.Application.DTOs;
 using ECommerceApi.Application.Exceptions;
 using ECommerceApi.Domain.Entities.Identity;
@@ -14,37 +15,17 @@ namespace ECommerceApi.Application.Features.Commands.AppUser.LoginUser
 {
     public class LoginUserCommandHandler : IRequestHandler<LoginUserCommandRequest, LoginUserCommandResponse>
     {
-        readonly UserManager<Domain.Entities.Identity.AppUser> _userManager;
-        readonly SignInManager<Domain.Entities.Identity.AppUser> _signInManager;
-        readonly ITokenHandler _tokenHandler;
+        readonly IAuthService _authService;
 
-        public LoginUserCommandHandler(SignInManager<Domain.Entities.Identity.AppUser> signInManager, UserManager<Domain.Entities.Identity.AppUser> userManager, ITokenHandler tokenHandler)
+        public LoginUserCommandHandler(IAuthService authService)
         {
-            _signInManager = signInManager;
-            _userManager = userManager;
-            _tokenHandler = tokenHandler;
+            _authService = authService;
         }
 
         public async Task<LoginUserCommandResponse> Handle(LoginUserCommandRequest request, CancellationToken cancellationToken)
         {
-            var user = await _userManager.FindByNameAsync(request.UsernameOrEmail);
-            if (user == null)
-                user = await _userManager.FindByEmailAsync(request.UsernameOrEmail);
-
-            if (user == null)
-                throw new NotFoundUserException("kullancı bulunamadı");
-
-            SignInResult result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
-            if (result.Succeeded)
-            {
-
-                TokenDTO token = _tokenHandler.CreateAccessToken(5);
-                return new LoginUserSuccessCommandResponse()
-                {
-                    Token = token
-                };
-            }
-            throw new AuthenticationErrorException();
+            var token = await _authService.LoginAsync(request.UsernameOrEmail, request.Password, 15);
+            return new LoginUserSuccessCommandResponse { Token = token };
 
 
 

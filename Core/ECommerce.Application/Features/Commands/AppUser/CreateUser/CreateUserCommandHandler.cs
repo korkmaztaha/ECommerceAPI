@@ -1,4 +1,6 @@
-﻿using ECommerceApi.Application.Exceptions;
+﻿using ECommerceApi.Application.Abstractions.Services;
+using ECommerceApi.Application.DTOs.User;
+using ECommerceApi.Application.Exceptions;
 using ECommerceApi.Domain.Entities.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -12,36 +14,25 @@ namespace ECommerceApi.Application.Features.Commands.AppUser.CreateUser
 {
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommandRequest, CreateUserCommandResponse>
     {
-        readonly UserManager<Domain.Entities.Identity.AppUser> _userManager;
+        readonly IUserService _userService;
 
-        public CreateUserCommandHandler(UserManager<Domain.Entities.Identity.AppUser> userManager)
+        public CreateUserCommandHandler(IUserService userService)
         {
-            _userManager = userManager;
+            _userService = userService;
         }
 
         public async Task<CreateUserCommandResponse> Handle(CreateUserCommandRequest request, CancellationToken cancellationToken)
         {
-            IdentityResult result = await _userManager.CreateAsync(new()
+            CreateUserResponseDTO response = await _userService.CreateAsync(new()
             {
-                Id = Guid.NewGuid().ToString(),
-                UserName = request.UserName,
                 Email = request.Email,
                 NameSurname = request.NameSurname,
+                Password = request.Password,
+                PasswordConfirm = request.PasswordConfirm,
+                UserName = request.UserName,
+            });
 
-            }, request.Password) ;
-
-            if (result.Succeeded)
-            {
-
-                return new()
-                {
-                    Succeeded = true,
-                    Message = "Kullanıcı eklendi"
-                };
-               
-            }
-          
-            throw new UserCreateFailedException();
+            return new() { Message = response.Message, Succeeded = response.Succeeded };
         }
     }
 }
