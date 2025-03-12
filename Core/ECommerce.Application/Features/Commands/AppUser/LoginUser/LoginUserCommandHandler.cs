@@ -4,6 +4,7 @@ using ECommerceApi.Application.DTOs;
 using ECommerceApi.Application.Exceptions;
 using ECommerceApi.Domain.Entities.Identity;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -13,8 +14,10 @@ using System.Threading.Tasks;
 
 namespace ECommerceApi.Application.Features.Commands.AppUser.LoginUser
 {
+  
     public class LoginUserCommandHandler : IRequestHandler<LoginUserCommandRequest, LoginUserCommandResponse>
     {
+      
         readonly IAuthService _authService;
 
         public LoginUserCommandHandler(IAuthService authService)
