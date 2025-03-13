@@ -1,11 +1,13 @@
 ﻿using ECommerceApi.Application.Abstractions.Token;
 using ECommerceApi.Application.DTOs;
+using ECommerceApi.Domain.Entities.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,7 +23,7 @@ namespace ECommerceApi.Infrastructure.Services.Token
             _configuration = configuration;
         }
 
-        public TokenDTO CreateAccessToken(int second)
+        public TokenDTO CreateAccessToken(int second, AppUser appUser)
         {
             TokenDTO token = new();
 
@@ -36,7 +38,8 @@ namespace ECommerceApi.Infrastructure.Services.Token
                 issuer: _configuration["Token:Issuer"],
                 expires: token.Expiration,
                 notBefore: DateTime.UtcNow,
-                signingCredentials: signingCredentials
+                signingCredentials: signingCredentials,
+                claims: new List<Claim> {new(ClaimTypes.Name,appUser.UserName) }
                 );
 
             JwtSecurityTokenHandler tokenHandler = new();

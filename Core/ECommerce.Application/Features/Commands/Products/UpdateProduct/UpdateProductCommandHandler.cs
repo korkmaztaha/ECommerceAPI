@@ -1,6 +1,7 @@
 ﻿using ECommerceApi.Application.Repositories;
 using ECommerceApi.Domain.Entities;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,11 +14,13 @@ namespace ECommerceApi.Application.Features.Commands.Products.UpdateProduct
     {
         IProductWriteRepository _productWriteRepository;
         IProductReadRepository _productReadRepository;
+        ILogger<UpdateProductCommandHandler> _logger;
 
-        public UpdateProductCommandHandler(IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository)
+        public UpdateProductCommandHandler(IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository, ILogger<UpdateProductCommandHandler> logger)
         {
             _productWriteRepository = productWriteRepository;
             _productReadRepository = productReadRepository;
+            _logger = logger;
         }
 
         public async Task<UpdateProductCommandResponse> Handle(UpdateProductCommandRequest request, CancellationToken cancellationToken)
@@ -29,6 +32,7 @@ namespace ECommerceApi.Application.Features.Commands.Products.UpdateProduct
             product.Price = request.Price;
 
             await _productWriteRepository.SaveAsync();
+            _logger.LogInformation("Product Updated");
             return new();
         }
     }

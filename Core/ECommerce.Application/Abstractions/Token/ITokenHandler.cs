@@ -1,4 +1,5 @@
 ﻿using ECommerceApi.Application.DTOs;
+using ECommerceApi.Domain.Entities.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace ECommerceApi.Application.Abstractions.Token
 {
     public interface ITokenHandler
     {
-        TokenDTO CreateAccessToken(int second);
+        TokenDTO CreateAccessToken(int second,AppUser appUser);
         string CreateRefreshToken();
     }
 }
