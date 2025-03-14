@@ -8,6 +8,8 @@ using ECommerceApi.Infrastructure.Filters;
 using ECommerceApi.Infrastructure.Services.Storage.Azure;
 using ECommerceApi.Infrastructure.Services.Storage.Local;
 using ECommerceApi.Persistence;
+using ECommerceApi.SignalR;
+using ECommerceApi.SignalR.Hubs;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.HttpLogging;
@@ -24,6 +26,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>
     policy.WithOrigins("http://localhost:4100", "https://localhost:4100").AllowAnyHeader().AllowAnyMethod().AllowCredentials()
+//.AllowCredentials() signalR için eklenmeli
 ));
 
 
@@ -77,6 +80,7 @@ builder.Services.AddHttpLogging(logging =>
 builder.Services.AddPersitenceServices();
 builder.Services.AddInfrastructureServices();
 builder.Services.AddApplicationServices();
+builder.Services.AddSignalRServices();
 //builder.Services.AddStorage<LocalStorage>();
 //TODO: detaylý test et
 builder.Services.AddStorage<AzureStorage>();
@@ -136,5 +140,5 @@ app.Use(async (context, next) =>
 });
 
 app.MapControllers();
-
+app.MapHubs();
 app.Run();

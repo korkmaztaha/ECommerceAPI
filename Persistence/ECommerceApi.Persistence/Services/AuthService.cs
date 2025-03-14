@@ -134,7 +134,7 @@ namespace ECommerceApi.Persistence.Services
             if (user != null && user?.RefreshTokenEndDate > DateTime.UtcNow)
             {
                 TokenDTO token = _tokenHandler.CreateAccessToken(15,user);
-                await _userService.UpdateRefreshTokenAsync(token.RefreshToken, user, token.Expiration, 15);
+                await _userService.UpdateRefreshTokenAsync(token.RefreshToken, user, token.Expiration, 300);
                 return token;
             }
             else

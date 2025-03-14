@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerceApi.Api", "Present
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerceApi.Persistence", "Persistence\ECommerceApi.Persistence\ECommerceApi.Persistence.csproj", "{8825C668-AB88-4092-89BC-A7486C5F7B51}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerceApi.SignalR", "Infrastructure\ECommerceApi.SignalR\ECommerceApi.SignalR.csproj", "{696A0133-4CF4-4D66-B204-F6C0B903525D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{8825C668-AB88-4092-89BC-A7486C5F7B51}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8825C668-AB88-4092-89BC-A7486C5F7B51}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8825C668-AB88-4092-89BC-A7486C5F7B51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{696A0133-4CF4-4D66-B204-F6C0B903525D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{696A0133-4CF4-4D66-B204-F6C0B903525D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{696A0133-4CF4-4D66-B204-F6C0B903525D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{696A0133-4CF4-4D66-B204-F6C0B903525D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,6 +61,7 @@ Global
 		{311580CB-2D39-4FAE-BB85-B550F7CA1F94} = {0911939C-1096-48F8-AAED-261FEBA5C483}
 		{94C9264E-FB2C-4704-9534-91142BEBD743} = {0AC344C5-DFA7-4BA8-A099-61AB6546F814}
 		{8825C668-AB88-4092-89BC-A7486C5F7B51} = {0911939C-1096-48F8-AAED-261FEBA5C483}
+		{696A0133-4CF4-4D66-B204-F6C0B903525D} = {0911939C-1096-48F8-AAED-261FEBA5C483}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EBB02E43-511B-412A-96F5-03BDDF5A3C5B}

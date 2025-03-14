@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Core\ECommerce.Application\ECommerceApi.Application.csproj" />
     <ProjectReference Include="..\..\Infrastructure\ECommerceApi.Infrastructure\ECommerceApi.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\ECommerceApi.SignalR\ECommerceApi.SignalR.csproj" />
     <ProjectReference Include="..\..\Persistence\ECommerceApi.Persistence\ECommerceApi.Persistence.csproj" />
   </ItemGroup>
 
