@@ -28,6 +28,20 @@ namespace ECommerceApi.Persistence.Contexts
         public DbSet<Basket> Baskets { get; set; }
         public DbSet<BasketItem> BasketItems { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<Order>()
+                  .HasKey(b => b.Id);
+
+            builder.Entity<Basket>()
+                .HasOne(b => b.Order)
+                .WithOne(o => o.Basket)
+                .HasForeignKey<Order>(b => b.Id);
+
+            //IdentityDbContext kullanılıyor ise yazılmalı
+            base.OnModelCreating(builder);
+        }
+
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
@@ -39,7 +53,7 @@ namespace ECommerceApi.Persistence.Contexts
                 {
                     EntityState.Added => data.Entity.CreatedDate = DateTime.UtcNow,
                     EntityState.Modified => data.Entity.UpdatedDate = DateTime.UtcNow,
-                    _=>DateTime.UtcNow
+                    _ => DateTime.UtcNow
                 };
 
             }
