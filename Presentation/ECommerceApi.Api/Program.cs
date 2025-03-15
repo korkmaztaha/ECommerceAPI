@@ -76,7 +76,7 @@ builder.Services.AddHttpLogging(logging =>
 
 
 
-
+builder.Services.AddHttpContextAccessor();//Diðer katmanlarda kullanýcýdan gelen requeste HttpContext üzerinden eriþmek için kullanýlýr.
 builder.Services.AddPersitenceServices();
 builder.Services.AddInfrastructureServices();
 builder.Services.AddApplicationServices();
