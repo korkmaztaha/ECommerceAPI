@@ -1,4 +1,4 @@
-﻿using ECommerceApi.Application.ViewModels;
+﻿using ECommerceApi.Application.ViewModels.Products;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
