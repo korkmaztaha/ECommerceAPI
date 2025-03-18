@@ -128,5 +128,14 @@ namespace ECommerceApi.Persistence.Services
             }
 
         }
+
+        public Basket? GetUserActiveBasket
+        {
+            get
+            {
+                Basket? basket = ContextUser().Result;
+                return basket;
+            }
+        }
     }
 }
