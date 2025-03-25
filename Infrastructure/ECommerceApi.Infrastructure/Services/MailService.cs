@@ -36,7 +36,7 @@ namespace ECommerceApi.Infrastructure.Services
                 if (!string.IsNullOrWhiteSpace(to) && to.Contains("@") && to.Contains("."))
                     mail.To.Add(to);
                 else
-                    throw new ArgumentException($"Geçersiz e-posta adresi: {to}");
+                    throw new ArgumentException($"Geçersiz e-posta adresi test: {to}");
             }
 
             mail.Subject = subject;
