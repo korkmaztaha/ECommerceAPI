@@ -60,7 +60,10 @@ namespace ECommerceApi.Infrastructure.Services
             }
         }
 
-
+        public Task SendMessageAsyncNew(string[] toS, string subject, string body, bool isBodyHtml = true)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 
