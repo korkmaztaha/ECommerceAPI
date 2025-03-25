@@ -24,7 +24,7 @@ namespace ECommerceApi.Persistence.Services
         public async Task CreateOrderAsync(CreateOrderDTO createOrder)
         {
             var orderCode = (new Random().NextDouble() * 1000).ToString();
-            orderCode = orderCode.Substring(orderCode.IndexOf(".")+1, orderCode.Length - orderCode.IndexOf(".") - 1);
+            orderCode = orderCode.Substring(orderCode.IndexOf(".") + 1, orderCode.Length - orderCode.IndexOf(".") - 1);
             await _orderWriteRepository.AddAsync(new()
             {
                 Adress = createOrder.Address,
@@ -40,5 +40,11 @@ namespace ECommerceApi.Persistence.Services
         {
             throw new NotImplementedException();
         }
+
+        public async Task<SingleOrderDTO> GetOrderByIdAsync(string id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
+
