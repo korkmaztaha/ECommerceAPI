@@ -10,7 +10,5 @@ namespace ECommerceApi.Application.Abstractions.Services
     {
         Task SendMessageAsync(string to, string subject, string body, bool isBodyHtml=true );
         Task SendMessageAsync(string[] toS, string subject, string body, bool isBodyHtml = true);
-
-        Task SendMessageAsyncNew(string[] toS, string subject, string body, bool isBodyHtml = true);
     }
 }
