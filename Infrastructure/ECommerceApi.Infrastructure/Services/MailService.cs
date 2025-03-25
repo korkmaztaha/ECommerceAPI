@@ -30,7 +30,7 @@ namespace ECommerceApi.Infrastructure.Services
             MailMessage mail = new();
             mail.IsBodyHtml = isBodyHtml;
 
-            // Alıcı adreslerini kontrol ederek ekle
+ 
             foreach (var to in toS)
             {
                 if (!string.IsNullOrWhiteSpace(to) && to.Contains("@") && to.Contains("."))
