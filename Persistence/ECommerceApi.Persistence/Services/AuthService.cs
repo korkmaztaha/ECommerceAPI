@@ -7,6 +7,7 @@ using ECommerceApi.Domain.Entities.Identity;
 using Google.Apis.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
@@ -28,8 +29,9 @@ namespace ECommerceApi.Persistence.Services
         readonly ITokenHandler _tokenHandler;
         readonly SignInManager<AppUser> _signInManager;
         readonly IUserService _userService;
+        readonly IMailService _mailService;
 
-        public AuthService(IHttpClientFactory httpClientFactory, IConfiguration configuration, UserManager<Domain.Entities.Identity.AppUser> userManager, ITokenHandler tokenHandler, SignInManager<AppUser> signInManager, IUserService userService)
+        public AuthService(IHttpClientFactory httpClientFactory, IConfiguration configuration, UserManager<Domain.Entities.Identity.AppUser> userManager, ITokenHandler tokenHandler, SignInManager<AppUser> signInManager, IUserService userService, IMailService mailService)
         {
             _httpClient = httpClientFactory.CreateClient();
             _configuration = configuration;
@@ -37,6 +39,7 @@ namespace ECommerceApi.Persistence.Services
             _tokenHandler = tokenHandler;
             _signInManager = signInManager;
             _userService = userService;
+            _mailService = mailService;
         }
 
         async Task<TokenDTO> CreateUserExternalAsync(AppUser user, string email, string name, UserLoginInfo info, int accessTokenLifeTime)
@@ -139,6 +142,21 @@ namespace ECommerceApi.Persistence.Services
             }
             else
                 throw new NotFoundUserException();
+        }
+
+        public async Task PasswordResetAsync(string email)
+        {
+          AppUser user=  await  _userManager.FindByEmailAsync(email);
+            if (user!=null)
+            {
+                string resetToken= await _userManager.GeneratePasswordResetTokenAsync(user);
+
+                //url de kullanılabilecek formta getirme işlemi " vs. engellemek için
+                byte[] tokenBytes=Encoding.UTF8.GetBytes(resetToken);
+                resetToken=WebEncoders.Base64UrlEncode(tokenBytes);
+
+                _mailService.SendPasswordResetMailAsync(email,user.Id,resetToken);
+            }
         }
     }
 }

@@ -21,7 +21,7 @@ namespace ECommerceApi.Api.Controllers
         [HttpGet]
         public async Task<ActionResult> MailTest()
         {
-           await _mailService.SendMessageAsync("xxx@mail.com", "Test mail Subject", "TestMail Body");
+           await _mailService.SendMailAsync("xxx@mail.com", "Test mail Subject", "TestMail Body");
             return Ok();
         }
     }
