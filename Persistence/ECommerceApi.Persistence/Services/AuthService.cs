@@ -3,6 +3,7 @@ using ECommerceApi.Application.Abstractions.Token;
 using ECommerceApi.Application.DTOs;
 using ECommerceApi.Application.DTOs.Facebook;
 using ECommerceApi.Application.Exceptions;
+using ECommerceApi.Application.Helpers;
 using ECommerceApi.Domain.Entities.Identity;
 using Google.Apis.Auth;
 using MediatR;
@@ -151,9 +152,8 @@ namespace ECommerceApi.Persistence.Services
             {
                 string resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
 
-                //url de kullanılabilecek formta getirme işlemi " vs. engellemek için
-                byte[] tokenBytes = Encoding.UTF8.GetBytes(resetToken);
-                resetToken = WebEncoders.Base64UrlEncode(tokenBytes);
+
+                resetToken = resetToken.UrlEncode();
 
                 _mailService.SendPasswordResetMailAsync(email, user.Id, resetToken);
             }
@@ -165,10 +165,10 @@ namespace ECommerceApi.Persistence.Services
 
             if (user != null)
             {
-                byte[] tokenBytes = WebEncoders.Base64UrlDecode(resetToken);
-                resetToken = Encoding.UTF8.GetString(tokenBytes);
+                resetToken = resetToken.UrlDecode();
 
-               return await _userManager.VerifyUserTokenAsync(user, _userManager.Options.Tokens.PasswordResetTokenProvider, "ResetPassword",resetToken);
+
+                return await _userManager.VerifyUserTokenAsync(user, _userManager.Options.Tokens.PasswordResetTokenProvider, "ResetPassword", resetToken);
             }
             return false;
         }
