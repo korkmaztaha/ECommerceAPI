@@ -13,6 +13,6 @@ namespace ECommerceApi.Application.Abstractions.Services
         Task<CreateUserResponseDTO> CreateAsync(CreateUserDTO model);
         Task UpdateRefreshTokenAsync(string refreshToken,AppUser user, DateTime accessTokenDate, int 
             addOnAccessTokenDate);
-        Task UpdatePassword(string userId, string resetToken, string newPassoword);
+        Task UpdatePasswordAsync(string userId, string resetToken, string newPassoword);
     }
 }

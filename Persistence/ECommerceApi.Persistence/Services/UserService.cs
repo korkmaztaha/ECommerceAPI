@@ -46,7 +46,7 @@ namespace ECommerceApi.Persistence.Services
             return response;
         }
 
-        public async Task UpdatePassword(string userId, string resetToken, string newPassoword)
+        public async Task UpdatePasswordAsync(string userId, string resetToken, string newPassoword)
         {
             AppUser user = await _userManager.FindByIdAsync(userId);
             if (userId != null)
