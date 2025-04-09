@@ -1,4 +1,5 @@
 ﻿using ECommerceApi.Application.Abstractions.Services;
+using ECommerceApi.Application.DTOs.Order;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -21,9 +22,9 @@ namespace ECommerceApi.Application.Features.Commands.Order.CompleteOrder
 
         public async Task<CompleteOrderCommandResponse> Handle(CompleteOrderCommandRequest request, CancellationToken cancellationToken)
         {
-            //(bool succeeded, CompletedOrderDTO dto) = await _orderService.CompleteOrderAsync(request.Id);
-            //if (succeeded)
-            //    await _mailService.SendCompletedOrderMailAsync(dto.EMail, dto.OrderCode, dto.OrderDate, dto.Username);
+            (bool succeeded, CompletedOrderDTO dto) = await _orderService.CompleteOrderAsync(request.Id);
+            if (succeeded)
+                await _mailService.SendCompletedOrderMailAsync(dto.EMail, dto.OrderCode, dto.OrderDate, dto.Username);
             return new();
         }
     }
