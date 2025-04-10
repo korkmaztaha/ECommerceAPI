@@ -1,4 +1,7 @@
-﻿using ECommerceApi.Application.Features.Commands.Basket.AddItemToBasket;
+﻿using ECommerceApi.Application.Consts;
+using ECommerceApi.Application.CustomAttributes;
+using ECommerceApi.Application.Enums;
+using ECommerceApi.Application.Features.Commands.Basket.AddItemToBasket;
 using ECommerceApi.Application.Features.Commands.Basket.RemoveBasketItem;
 using ECommerceApi.Application.Features.Commands.Basket.UpdateQuantity;
 using ECommerceApi.Application.Features.Queries.Basket;
@@ -23,7 +26,7 @@ namespace ECommerceApi.Api.Controllers
         }
 
         [HttpGet]
-
+        [AuthorizeDefinition(Menu = AuthorizeDefinitionConstants.Baskets, ActionType = ActionType.Reading, Definition = "Get Basket Items")]
         public async Task<IActionResult> GetBasketItems([FromQuery] GetBasketItemsQueryRequest request)
         {
             List<GetBasketItemsQueryResponse> response = await _mediator.Send(request);
