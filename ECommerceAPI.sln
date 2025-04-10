@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerceApi.Api", "Present
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerceApi.Persistence", "Persistence\ECommerceApi.Persistence\ECommerceApi.Persistence.csproj", "{8825C668-AB88-4092-89BC-A7486C5F7B51}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerceApi.SignalR", "Infrastructure\ECommerceApi.SignalR\ECommerceApi.SignalR.csproj", "{696A0133-4CF4-4D66-B204-F6C0B903525D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerceApi.SignalR", "Infrastructure\ECommerceApi.SignalR\ECommerceApi.SignalR.csproj", "{696A0133-4CF4-4D66-B204-F6C0B903525D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
