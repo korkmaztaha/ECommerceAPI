@@ -16,12 +16,12 @@ namespace ECommerceApi.Infrastructure.Services.Configurations
 {
     public class ApplicationService : IApplicationService
     {
-        public List<Menu> GetAuthorizeDefinitionEndpoints(Type type)
+        public List<MenuDTO> GetAuthorizeDefinitionEndpoints(Type type)
         {
             Assembly assembly = Assembly.GetAssembly(type);
             var controllers = assembly.GetTypes().Where(t => t.IsAssignableTo(typeof(ControllerBase)));
 
-            List<Menu> menus = new();
+            List<MenuDTO> menus = new();
             if (controllers != null)
                 foreach (var controller in controllers)
                 {
@@ -32,7 +32,7 @@ namespace ECommerceApi.Infrastructure.Services.Configurations
                             var attributes = action.GetCustomAttributes(true);
                             if (attributes != null)
                             {
-                                Menu menu = null;
+                                MenuDTO menu = null;
 
                                 var authorizeDefinitionAttribute = attributes.FirstOrDefault(a => a.GetType() == typeof(AuthorizeDefinitionAttribute)) as AuthorizeDefinitionAttribute;
                                 if (!menus.Any(m => m.Name == authorizeDefinitionAttribute.Menu))
@@ -43,7 +43,7 @@ namespace ECommerceApi.Infrastructure.Services.Configurations
                                 else
                                     menu = menus.FirstOrDefault(m => m.Name == authorizeDefinitionAttribute.Menu);
 
-                                Application.DTOs.Configuration.Action _action = new()
+                                Application.DTOs.Configuration.ActionDTO _action = new()
                                 {
                                     ActionType = Enum.GetName(typeof(ActionType), authorizeDefinitionAttribute.ActionType),
                                     Definition = authorizeDefinitionAttribute.Definition
