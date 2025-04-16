@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ECommerceApi.Application.DTOs.Configuration
 {
-    public class Action
+    public class ActionDTO
     {
         public string ActionType { get; set; }
         public string HttpType { get; set; }

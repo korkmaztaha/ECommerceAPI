@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ECommerceApi.Domain.Entities.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace ECommerceApi.Application.DTOs.Configuration
 {
-    public class Menu
+    public class MenuDTO
     {
         public string Name { get; set; }
-        public List<Action> Actions { get; set; } = new();
+        public List<ActionDTO> Actions { get; set; } = new();
     }
 }
