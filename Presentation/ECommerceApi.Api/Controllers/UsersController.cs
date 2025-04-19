@@ -1,9 +1,13 @@
-﻿using ECommerceApi.Application.Features.Commands.AppUser.CreateUser;
+﻿using ECommerceApi.Application.CustomAttributes;
+using ECommerceApi.Application.Enums;
+using ECommerceApi.Application.Features.Commands.AppUser.CreateUser;
 using ECommerceApi.Application.Features.Commands.AppUser.FacebookLogin;
 using ECommerceApi.Application.Features.Commands.AppUser.GoogleLogin;
 using ECommerceApi.Application.Features.Commands.AppUser.LoginUser;
 using ECommerceApi.Application.Features.Commands.AppUser.UpdatePassword;
+using ECommerceApi.Application.Features.Queries.AppUser.GetAllUsers;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -51,6 +55,14 @@ namespace ECommerceApi.Api.Controllers
         public async Task<IActionResult> UpdatePassword([FromBody] UpdatePasswordCommandRequest request)
         {
             UpdatePasswordCommandResponse response = await _mediator.Send(request);
+            return Ok(response);
+        }
+        [HttpGet]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [AuthorizeDefinition(ActionType = ActionType.Reading, Definition = "Get All Users", Menu = "Users")]
+        public async Task<IActionResult> GetAllUsers([FromQuery] GetAllUsersQueryRequest request)
+        {
+            GetAllUsersQueryResponse response = await _mediator.Send(request);
             return Ok(response);
         }
 
