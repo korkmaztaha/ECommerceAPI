@@ -6,6 +6,7 @@ using ECommerceApi.Domain.Entities.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,8 @@ namespace ECommerceApi.Persistence.Services
         {
             _userManager = userManager;
         }
+
+        public int TotalUsersCount => _userManager.Users.Count();
 
         public async Task<CreateUserResponseDTO> CreateAsync(CreateUserDTO model)
         {
@@ -45,6 +48,25 @@ namespace ECommerceApi.Persistence.Services
 
             return response;
         }
+
+        public async Task<List<ListUserDTO>> GetAllUsersAsync(int page, int size)
+        {
+            var users = await _userManager.Users
+                    .Skip(page * size)
+                    .Take(size)
+                    .Select(user => new ListUserDTO
+                    {
+                        Id = user.Id,
+                        Email = user.Email,
+                        NameSurname = user.NameSurname,
+                        TwoFactorEnabled = user.TwoFactorEnabled,
+                        UserName = user.UserName
+                    }).ToListAsync();
+
+            return users;
+
+        }
+
 
         public async Task UpdatePasswordAsync(string userId, string resetToken, string newPassoword)
         {
