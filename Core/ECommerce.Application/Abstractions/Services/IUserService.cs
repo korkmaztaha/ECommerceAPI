@@ -14,5 +14,7 @@ namespace ECommerceApi.Application.Abstractions.Services
         Task UpdateRefreshTokenAsync(string refreshToken,AppUser user, DateTime accessTokenDate, int 
             addOnAccessTokenDate);
         Task UpdatePasswordAsync(string userId, string resetToken, string newPassoword);
+        Task<List<ListUserDTO>> GetAllUsersAsync(int page, int size);
+        int TotalUsersCount { get; }
     }
 }
