@@ -1,5 +1,6 @@
 ﻿using ECommerceApi.Application.CustomAttributes;
 using ECommerceApi.Application.Enums;
+using ECommerceApi.Application.Features.Commands.AppUser.AssignRoleToUser;
 using ECommerceApi.Application.Features.Commands.AppUser.CreateUser;
 using ECommerceApi.Application.Features.Commands.AppUser.FacebookLogin;
 using ECommerceApi.Application.Features.Commands.AppUser.GoogleLogin;
@@ -63,6 +64,15 @@ namespace ECommerceApi.Api.Controllers
         public async Task<IActionResult> GetAllUsers([FromQuery] GetAllUsersQueryRequest request)
         {
             GetAllUsersQueryResponse response = await _mediator.Send(request);
+            return Ok(response);
+        }
+
+        [HttpPost("assign-role-to-user")]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [AuthorizeDefinition(ActionType = ActionType.Reading, Definition = "Assign Role To User", Menu = "Users")]
+        public async Task<IActionResult> AssignRoleToUser(AssignRoleToUserCommandRequest request)
+        {
+            AssignRoleToUserCommandResponse response = await _mediator.Send(request);
             return Ok(response);
         }
 
