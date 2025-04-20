@@ -7,6 +7,7 @@ using ECommerceApi.Application.Features.Commands.AppUser.GoogleLogin;
 using ECommerceApi.Application.Features.Commands.AppUser.LoginUser;
 using ECommerceApi.Application.Features.Commands.AppUser.UpdatePassword;
 using ECommerceApi.Application.Features.Queries.AppUser.GetAllUsers;
+using ECommerceApi.Application.Features.Queries.AppUser.GetRolesToUser;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -73,6 +74,15 @@ namespace ECommerceApi.Api.Controllers
         public async Task<IActionResult> AssignRoleToUser(AssignRoleToUserCommandRequest request)
         {
             AssignRoleToUserCommandResponse response = await _mediator.Send(request);
+            return Ok(response);
+        }
+
+        [HttpGet("get-roles-to-user/{UserId}")]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [AuthorizeDefinition(ActionType = ActionType.Reading, Definition = "Get Roles To Users", Menu = "Users")]
+        public async Task<IActionResult> GetRolesToUser([FromRoute] GetRolesToUserQueryRequest request)
+        {
+            GetRolesToUserQueryResponse response = await _mediator.Send(request);
             return Ok(response);
         }
 
