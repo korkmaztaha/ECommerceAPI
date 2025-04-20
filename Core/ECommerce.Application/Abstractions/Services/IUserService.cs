@@ -16,5 +16,6 @@ namespace ECommerceApi.Application.Abstractions.Services
         Task UpdatePasswordAsync(string userId, string resetToken, string newPassoword);
         Task<List<ListUserDTO>> GetAllUsersAsync(int page, int size);
         int TotalUsersCount { get; }
+        Task AssignRoleToUserAsnyc(string userId, string[] roles);
     }
 }
