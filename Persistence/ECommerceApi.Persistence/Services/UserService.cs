@@ -79,7 +79,21 @@ namespace ECommerceApi.Persistence.Services
 
         }
 
+      
 
+        public async Task<string[]> GetRolesToUserAsync(string userIdOrName)
+        {
+            AppUser user = await _userManager.FindByIdAsync(userIdOrName);
+            if (user == null)
+                user = await _userManager.FindByNameAsync(userIdOrName);
+
+            if (user != null)
+            {
+                var userRoles = await _userManager.GetRolesAsync(user);
+                return userRoles.ToArray();
+            }
+            return new string[] { };
+        }
         public async Task UpdatePasswordAsync(string userId, string resetToken, string newPassoword)
         {
             AppUser user = await _userManager.FindByIdAsync(userId);
