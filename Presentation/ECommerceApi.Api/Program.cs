@@ -84,9 +84,12 @@ builder.Services.AddSignalRServices();
 //builder.Services.AddStorage<LocalStorage>();
 //TODO: detaylý test et
 builder.Services.AddStorage<AzureStorage>();
-builder.Services.AddControllers(options => options.Filters.Add<ValidationFilter>())
-    .AddFluentValidation(conf => conf.RegisterValidatorsFromAssemblyContaining<CreateProductValidator>())
-    .ConfigureApiBehaviorOptions(options => options.SuppressModelStateInvalidFilter = true);
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<ValidationFilter>();
+    options.Filters.Add<RolePermissionFilter>();
+}).AddFluentValidation(conf => conf.RegisterValidatorsFromAssemblyContaining<CreateProductValidator>())
+  .ConfigureApiBehaviorOptions(options => options.SuppressModelStateInvalidFilter = true);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -109,7 +112,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Token:SecurityKey"])),
             LifetimeValidator = (notBefore, expires, securityToken, validationParameters) => expires != null ? expires > DateTime.UtcNow : false,
 
-            NameClaimType=ClaimTypes.Name
+            NameClaimType = ClaimTypes.Name
         };
     });
 

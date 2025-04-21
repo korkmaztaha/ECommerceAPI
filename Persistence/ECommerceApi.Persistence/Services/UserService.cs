@@ -2,6 +2,8 @@
 using ECommerceApi.Application.DTOs.User;
 using ECommerceApi.Application.Exceptions;
 using ECommerceApi.Application.Helpers;
+using ECommerceApi.Application.Repositories;
+using ECommerceApi.Domain.Entities;
 using ECommerceApi.Domain.Entities.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -18,10 +20,12 @@ namespace ECommerceApi.Persistence.Services
     public class UserService : IUserService
     {
         readonly UserManager<Domain.Entities.Identity.AppUser> _userManager;
+        readonly IEndpointReadRepository _endpointReadRepository;
 
-        public UserService(UserManager<AppUser> userManager)
+        public UserService(UserManager<AppUser> userManager, IEndpointReadRepository endpointReadRepository)
         {
             _userManager = userManager;
+            _endpointReadRepository = endpointReadRepository;
         }
 
         public int TotalUsersCount => _userManager.Users.Count();
@@ -126,5 +130,51 @@ namespace ECommerceApi.Persistence.Services
 
 
         }
+
+        public async Task<bool> HasRolePermissionToEndpointAsync(string name, string code)
+        {
+            var userRoles = await GetRolesToUserAsync(name);
+
+            if (!userRoles.Any())
+                return false;
+
+            Endpoint? endpoint = await _endpointReadRepository.Table
+                     .Include(e => e.Roles)
+                     .FirstOrDefaultAsync(e => e.Code == code);
+
+            if (endpoint == null)
+                return false;
+
+            var hasRole = false;
+            var endpointRoles = endpoint.Roles.Select(r => r.Name);
+
+            //foreach (var userRole in userRoles)
+            //{
+            //    if (!hasRole)
+            //    {
+            //        foreach (var endpointRole in endpointRoles)
+            //            if (userRole == endpointRole)
+            //            {
+            //                hasRole = true;
+            //                break;
+            //            }
+            //    }
+            //    else
+            //        break;
+            //}
+
+            //return hasRole;
+
+            foreach (var userRole in userRoles)
+            {
+                foreach (var endpointRole in endpointRoles)
+                    if (userRole == endpointRole)
+                        return true;
+            }
+
+            return false;
+        }
     }
 }
+
+
